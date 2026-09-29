@@ -3,39 +3,66 @@
 @tailwind utilities;
 
 :root {
-  --bg-page: #f1f5f9;
-  --surface: #ffffff;
-  --border-subtle: rgb(226 232 240 / 0.9);
-  --accent: #4f46e5;
-  --accent-hover: #4338ca;
+  --bg-page: #09090b;
+  /* zinc-950 */
 }
 
 @layer base {
   body {
+    /* Mantenemos tu configuración de tipografía */
     font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+    background-color: var(--bg-page);
+    color: #e4e4e7;
+    /* zinc-200 */
+
+    /* Cambiamos tu gradiente claro por uno sutil de neón oscuro */
     background-image:
-      radial-gradient(ellipse 80% 50% at 50% -20%, rgb(99 102 241 / 0.12), transparent),
-      radial-gradient(ellipse 60% 40% at 100% 0%, rgb(14 165 233 / 0.08), transparent);
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(49, 46, 129, 0.25), transparent),
+      radial-gradient(ellipse 60% 40% at 100% 0%, rgba(8, 145, 178, 0.15), transparent);
+  }
+
+  /* Scrollbar estilizado oscuro */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #18181b;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #3f3f46;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #52525b;
   }
 }
 
 @layer components {
   .inp {
-    @apply w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-normal text-slate-900 shadow-sm transition placeholder:text-slate-400 focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20;
+    @apply w-full rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm font-normal text-zinc-100 shadow-sm transition placeholder:text-zinc-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500;
   }
+
   .btn-primary {
-    @apply inline-flex items-center justify-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm shadow-indigo-600/20 transition hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2;
+    @apply inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 transition hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:ring-offset-2 focus:ring-offset-zinc-950;
   }
+
   .btn-ghost {
-    @apply inline-flex items-center justify-center rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-slate-400/30;
+    @apply inline-flex items-center justify-center rounded-lg px-3 py-2 text-sm font-medium text-zinc-400 transition hover:bg-zinc-800 hover:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-zinc-600;
   }
+
   .filter-pill {
-    @apply rounded-full px-3.5 py-1.5 text-sm font-medium transition focus:outline-none focus:ring-2 focus:ring-indigo-500/30;
+    @apply rounded-full px-3.5 py-1.5 text-sm font-medium transition-all duration-200 border focus:outline-none;
   }
+
   .filter-pill-active {
-    @apply bg-slate-900 text-white shadow-sm;
+    @apply bg-indigo-950/50 text-indigo-300 border-indigo-500/50 shadow-[0_0_10px_#6366f133];
   }
+
   .filter-pill-idle {
-    @apply bg-white/80 text-slate-600 ring-1 ring-slate-200/80 backdrop-blur-sm hover:bg-white hover:ring-slate-300;
+    @apply bg-zinc-900/50 text-zinc-400 border-zinc-800 hover:bg-zinc-800 hover:text-zinc-200;
   }
 }
