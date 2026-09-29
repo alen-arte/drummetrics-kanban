@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-page: #f1f5f9;
+  --surface: #ffffff;
+  --border-subtle: rgb(226 232 240 / 0.9);
+  --accent: #4f46e5;
+  --accent-hover: #4338ca;
+}
+
+@layer base {
+  body {
+    font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgb(99 102 241 / 0.12), transparent),
+      radial-gradient(ellipse 60% 40% at 100% 0%, rgb(14 165 233 / 0.08), transparent);
+  }
+}
+
+@layer components {
+  .inp {
+    @apply w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-normal text-slate-900 shadow-sm transition placeholder:text-slate-400 focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20;
+  }
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm shadow-indigo-600/20 transition hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-slate-400/30;
+  }
+  .filter-pill {
+    @apply rounded-full px-3.5 py-1.5 text-sm font-medium transition focus:outline-none focus:ring-2 focus:ring-indigo-500/30;
+  }
+  .filter-pill-active {
+    @apply bg-slate-900 text-white shadow-sm;
+  }
+  .filter-pill-idle {
+    @apply bg-white/80 text-slate-600 ring-1 ring-slate-200/80 backdrop-blur-sm hover:bg-white hover:ring-slate-300;
+  }
+}
