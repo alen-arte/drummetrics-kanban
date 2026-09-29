@@ -6,19 +6,19 @@ const ESTADOS = ['Pendiente', 'En Proceso', 'Listo para revisión', 'Completada'
 const PRIOS = ['Alta', 'Media', 'Baja']
 const PERSONAS = ['Alén', 'John', 'Sin asignar']
 
-// NUEVOS COLORES: Estilo Cyberpunk / Oscuro
 const COLORES = {
-  Alta: 'bg-red-950/50 text-red-400 border border-red-500/30',
-  Media: 'bg-amber-950/50 text-amber-400 border border-amber-500/30',
-  Baja: 'bg-emerald-950/50 text-emerald-400 border border-emerald-500/30',
-  Pendiente: 'bg-zinc-900/50 text-zinc-400 border border-zinc-700',
-  'En Proceso': 'bg-blue-950/50 text-blue-400 border border-blue-500/30',
-  'Listo para revisión': 'bg-purple-950/50 text-purple-400 border border-purple-500/30',
-  Completada: 'bg-emerald-950/50 text-emerald-400 border border-emerald-500/30',
-  'Alén': 'bg-cyan-950/50 text-cyan-400 border border-cyan-500/30',
-  John: 'bg-orange-950/50 text-orange-400 border border-orange-500/30',
-  'Sin asignar': 'bg-zinc-900/50 text-zinc-500 border border-zinc-800',
+  Alta: 'bg-red-950/60 text-red-400 border border-red-500/50 shadow-[0_0_10px_#ef444433]',
+  Media: 'bg-amber-950/60 text-amber-400 border border-amber-500/50 shadow-[0_0_10px_#f59e0b33]',
+  Baja: 'bg-emerald-950/60 text-emerald-400 border border-emerald-500/50 shadow-[0_0_10px_#10b98133]',
+  Pendiente: 'bg-slate-900/60 text-slate-400 border border-slate-700/50',
+  'En Proceso': 'bg-cyan-950/60 text-cyan-400 border border-cyan-500/50 shadow-[0_0_10px_#06b6d433]',
+  'Listo para revisión': 'bg-purple-950/60 text-purple-400 border border-purple-500/50 shadow-[0_0_10px_#a855f733]',
+  Completada: 'bg-emerald-950/60 text-emerald-400 border border-emerald-500/50 shadow-[0_0_10px_#10b98133]',
+  'Alén': 'bg-slate-800/60 text-slate-300 border border-sky-700/60 shadow-none',
+  John: 'bg-zinc-800/60 text-zinc-300 border border-fuchsia-700/60 shadow-none',
+  'Sin asignar': 'bg-slate-900/30 text-slate-500 border border-slate-700 border-dashed',
 }
+
 const RP = { Alta: 0, Media: 1, Baja: 2 }
 const RR = { 'Alén': 0, John: 1, 'Sin asignar': 2 }
 const ordenar = (arr, modo = 'prio') => {
@@ -28,28 +28,31 @@ const ordenar = (arr, modo = 'prio') => {
       : (a, b) => RP[a.prioridad] - RP[b.prioridad] || pos(a, b)
   return [...arr].sort(f)
 }
-const L = { Pendiente: 'To do', 'En Proceso': 'In progress', 'Listo para revisión': 'Ready for review', Completada: 'Done', Alta: 'High', Media: 'Medium', Baja: 'Low', 'Sin asignar': 'Unassigned' }
+const L = { Pendiente: 'To-do', 'En Proceso': 'In progress', 'Listo para revisión': 'Ready for review', Completada: 'Done', Alta: 'High', Media: 'Medium', Baja: 'Low', 'Sin asignar': 'Unassigned' }
 const lb = v => L[v] || v
 const vacia = { titulo: '', modulo: '', estado: 'Pendiente', prioridad: 'Media', responsable: 'Sin asignar', depende_de: [], notas: '' }
-const FILTROS = [['todas', 'All'], ['Alén', 'Alén'], ['John', 'John'], ['alta', 'High priority'], ['bloq', 'Blocked']]
 
-// COLORES PARA LAS COLUMNAS Y BORDES LATERALES
 const COL_ESTADO = {
-  Pendiente: { dot: 'bg-zinc-500 shadow-[0_0_8px_rgba(113,113,122,0.8)]', bar: 'border-t-zinc-600', head: 'text-zinc-300' },
-  'En Proceso': { dot: 'bg-blue-400 shadow-[0_0_8px_rgba(96,165,250,0.8)]', bar: 'border-t-blue-500/50', head: 'text-blue-300' },
-  'Listo para revisión': { dot: 'bg-purple-400 shadow-[0_0_8px_rgba(192,132,252,0.8)]', bar: 'border-t-purple-500/50', head: 'text-purple-300' },
-  Completada: { dot: 'bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]', bar: 'border-t-emerald-500/50', head: 'text-emerald-300' },
+  Pendiente: { dot: 'bg-slate-400 shadow-[0_0_8px_#94a3b8]', bar: 'border-t-slate-500/50', head: 'text-slate-300' },
+  'En Proceso': { dot: 'bg-cyan-400 shadow-[0_0_8px_#22d3ee]', bar: 'border-t-cyan-500/70 shadow-[0_-5px_15px_#06b6d420]', head: 'text-cyan-300' },
+  'Listo para revisión': { dot: 'bg-purple-400 shadow-[0_0_8px_#c084fc]', bar: 'border-t-purple-500/70 shadow-[0_-5px_15px_#a855f720]', head: 'text-purple-300' },
+  Completada: { dot: 'bg-emerald-400 shadow-[0_0_8px_#34d399]', bar: 'border-t-emerald-500/70 shadow-[0_-5px_15px_#10b98120]', head: 'text-emerald-300' },
 }
-const PRIO_BORDER = { Alta: 'border-l-red-500', Media: 'border-l-amber-500', Baja: 'border-l-emerald-500' }
+const PRIO_BORDER = { Alta: 'border-l-red-500 shadow-[-2px_0_8px_#ef444440]', Media: 'border-l-amber-500 shadow-[-2px_0_8px_#f59e0b40]', Baja: 'border-l-emerald-500 shadow-[-2px_0_8px_#10b98140]' }
 
 export default function Page() {
   const [tareas, setTareas] = useState([])
-  const [filtro, setFiltro] = useState('todas')
   const [edit, setEdit] = useState(null)
   const [err, setErr] = useState(null)
   const [orden, setOrden] = useState({})
   const [sobre, setSobre] = useState(null)
   const [abierta, setAbierta] = useState(null)
+  const [soltado, setSoltado] = useState(null)
+  const [hoveredCard, setHoveredCard] = useState(null)
+
+  const [fResp, setFResp] = useState([])
+  const [fPrio, setFPrio] = useState([])
+  const [fBloq, setFBloq] = useState([])
 
   const cargar = async () => {
     const { data, error } = await supabase.from('tareas').select('*').order('created_at')
@@ -76,11 +79,19 @@ export default function Page() {
   const porId = useMemo(() => Object.fromEntries(tareas.map(t => [t.id, t])), [tareas])
   const bloqueos = t => (t.depende_de || []).map(id => porId[id]).filter(d => d && d.estado !== 'Completada')
 
-  const visibles = tareas.filter(t =>
-    filtro === 'todas' ? true :
-      filtro === 'alta' ? t.prioridad === 'Alta' :
-        filtro === 'bloq' ? bloqueos(t).length > 0 && t.estado !== 'Completada' :
-          t.responsable === filtro)
+  const visibles = tareas.filter(t => {
+    const matchResp = fResp.length === 0 || fResp.includes(t.responsable)
+    const matchPrio = fPrio.length === 0 || fPrio.includes(t.prioridad)
+    const isBlocked = bloqueos(t).length > 0 && t.estado !== 'Completada'
+    const matchBloq = fBloq.length === 0 || (fBloq.includes('Blocked') && isBlocked) || (fBloq.includes('Available') && !isBlocked)
+    return matchResp && matchPrio && matchBloq
+  })
+
+  const dependenciasResaltadas = useMemo(() => {
+    const activa = abierta || hoveredCard;
+    if (!activa) return [];
+    return porId[activa]?.depende_de || [];
+  }, [abierta, hoveredCard, porId])
 
   const cambiar = async (id, campo, valor) => {
     setTareas(ts => ts.map(t => t.id === id ? { ...t, [campo]: valor } : t))
@@ -98,6 +109,10 @@ export default function Page() {
     const reales = cambios.filter(c => porId[c.id].posicion !== c.posicion || porId[c.id].estado !== c.estado)
     setTareas(ts => ts.map(t => { const c = cambios.find(x => x.id === t.id); return c ? { ...t, ...c } : t }))
     setOrden(o => ({ ...o, [estado]: 'custom' }))
+
+    setSoltado(id)
+    setTimeout(() => setSoltado(null), 600)
+
     const res = await Promise.all(reales.map(c => supabase.from('tareas').update({ estado: c.estado, posicion: c.posicion }).eq('id', c.id)))
     const fallo = res.find(r => r.error)
     if (fallo) { setErr(fallo.error.message); cargar() }
@@ -125,50 +140,52 @@ export default function Page() {
   const pct = tareas.length ? Math.round((hechas / tareas.length) * 100) : 0
 
   return (
-    <main className="mx-auto max-w-[88rem] px-4 pb-10 pt-6 sm:px-6 min-h-screen">
-      {/* Header modificado con desenfoque y tema oscuro */}
-      <header className="sticky top-0 z-20 -mx-4 mb-6 border-b border-zinc-800/60 bg-[#09090b]/70 px-4 py-4 backdrop-blur-xl sm:-mx-6 sm:px-6">
-        <div className="flex flex-wrap items-end gap-4">
-          <div className="min-w-0 flex-1">
-            <div className="flex items-center gap-3">
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-900 to-zinc-900 border border-indigo-500/30 text-lg shadow-[0_0_15px_rgba(99,102,241,0.2)]" aria-hidden>🥁</span>
-              <div>
-                <h1 className="text-xl font-bold tracking-tight text-zinc-100 sm:text-2xl">DrumMetrics</h1>
-                <p className="text-xs font-medium text-zinc-400">Shared task board</p>
-              </div>
+    <main className="mx-auto max-w-[90rem] px-4 pb-12 pt-4 sm:px-6 min-h-screen">
+      <header className="relative z-[70] mx-auto mb-10 max-w-7xl rounded-2xl border border-cyan-500/30 bg-slate-900/40 px-6 py-5 backdrop-blur-xl shadow-[0_0_30px_#06b6d415]">
+        <div className="flex flex-wrap items-center gap-6">
+          <div className="min-w-0 flex-1 flex items-center gap-4">
+            <div className="relative flex h-14 w-14 shrink-0 items-center justify-center rounded-xl border border-cyan-500/50 shadow-[0_0_20px_#06b6d440] overflow-hidden">
+              <img src="/logo.jpg" alt="DrumMetrics Logo" className="h-full w-full object-cover" />
+              <div className="absolute -inset-0.5 rounded-xl border border-cyan-400/30 blur-sm mix-blend-screen pointer-events-none"></div>
             </div>
-            <div className="mt-4 max-w-xs">
-              <div className="mb-1 flex justify-between text-xs font-medium text-zinc-400">
-                <span>{hechas} of {tareas.length} completed</span>
-                <span className="text-indigo-400">{pct}%</span>
-              </div>
-              <div className="h-1.5 overflow-hidden rounded-full bg-zinc-800">
-                <div className="h-full rounded-full bg-gradient-to-r from-indigo-500 to-cyan-400 transition-all duration-500 shadow-[0_0_10px_rgba(45,212,191,0.5)]" style={{ width: `${pct}%` }} />
+            <div>
+              <h1 className="text-2xl font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-cyan-100 to-cyan-400 drop-shadow-[0_0_10px_rgba(34,211,238,0.4)]">DRUMMETRICS</h1>
+              <div className="flex items-center gap-3 mt-1">
+                <p className="text-[10px] font-mono tracking-[0.2em] text-cyan-500 uppercase">Shared Task Board</p>
+                <div className="h-px flex-1 bg-gradient-to-r from-cyan-500/50 to-transparent min-w-[50px]"></div>
               </div>
             </div>
           </div>
-          <div className="flex w-full flex-wrap items-center gap-2 sm:ml-auto sm:w-auto sm:justify-end">
-            {FILTROS.map(([k, l]) => (
-              <button key={k} type="button" onClick={() => setFiltro(k)}
-                className={`filter-pill ${filtro === k ? 'filter-pill-active' : 'filter-pill-idle'}`}>
-                {k === 'alta' && <span className="mr-1 text-red-500">●</span>}
-                {k === 'bloq' && <span className="mr-1">🔒</span>}
-                {l}
-              </button>
-            ))}
-            <button type="button" onClick={() => setEdit({ ...vacia })} className="btn-primary shrink-0">+ New task</button>
+
+          <div className="flex w-full flex-wrap items-center gap-3 sm:w-auto sm:justify-end">
+            <div className="flex gap-2 p-1.5 rounded-xl bg-slate-950/50 border border-cyan-900/50 backdrop-blur-md">
+              <FiltroMultiple label="Assignee" opciones={PERSONAS} seleccionados={fResp} setSeleccionados={setFResp} />
+              <FiltroMultiple label="Priority" opciones={PRIOS} seleccionados={fPrio} setSeleccionados={setFPrio} />
+              <FiltroMultiple label="Status" opciones={['Blocked', 'Available']} seleccionados={fBloq} setSeleccionados={setFBloq} />
+            </div>
+            <button type="button" onClick={() => setEdit({ ...vacia })} className="btn-primary ml-2 shrink-0 tracking-wide">+ NEW TASK</button>
+          </div>
+        </div>
+
+        <div className="mt-5 border-t border-cyan-900/50 pt-4">
+          <div className="flex items-center gap-4">
+            <span className="text-xs font-mono text-cyan-400/80">{hechas} / {tareas.length}</span>
+            <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-slate-950/80 border border-slate-800">
+              <div className="relative h-full rounded-full bg-gradient-to-r from-cyan-600 to-cyan-300 transition-all duration-500 shadow-[0_0_10px_#22d3ee]" style={{ width: `${pct}%` }}>
+                <div className="absolute inset-0 bg-white/20 w-full animate-[shimmer_2s_infinite]"></div>
+              </div>
+            </div>
+            <span className="text-xs font-bold text-cyan-300 drop-shadow-[0_0_5px_#22d3ee]">{pct}%</span>
           </div>
         </div>
       </header>
 
       {err && (
-        <p className="mb-4 flex items-start gap-2 rounded-xl border border-red-900/50 bg-red-950/30 px-4 py-3 text-sm text-red-400 backdrop-blur-md" role="alert">
-          <span aria-hidden>⚠</span>
-          <span>{err}</span>
+        <p className="mx-auto mb-6 max-w-7xl flex items-start gap-2 rounded-xl border border-red-500/50 bg-red-950/40 px-4 py-3 text-sm text-red-200 backdrop-blur-md shadow-[0_0_15px_#ef444433]" role="alert">
+          <span aria-hidden>⚠</span><span>{err}</span>
         </p>
       )}
 
-      {/* Tablero Kanban */}
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
         {ESTADOS.map(estado => {
           const col = COL_ESTADO[estado]
@@ -177,102 +194,141 @@ export default function Page() {
             <section key={estado}
               onDragOver={e => e.preventDefault()}
               onDrop={e => { const id = e.dataTransfer.getData('id'); if (id) soltar(id, estado, null) }}
-              className={`flex min-h-[20rem] flex-col rounded-2xl border border-zinc-800/80 border-t-[3px] bg-zinc-900/20 p-3 shadow-lg backdrop-blur-sm ${col.bar}`}>
+              className={`flex min-h-[25rem] flex-col rounded-2xl border border-cyan-500/20 bg-slate-900/40 p-3 shadow-[0_0_20px_rgba(0,0,0,0.5)] backdrop-blur-xl border-t-[4px] transition-all ${col.bar}`}>
 
-              {/* Cabecera de Columna */}
-              <div className="mb-4 flex items-center gap-2 px-1">
+              <div className="mb-5 flex items-center gap-3 px-2 pt-2">
                 <span className={`h-2.5 w-2.5 shrink-0 rounded-full ${col.dot}`} aria-hidden />
-                <h2 className={`text-sm font-semibold tracking-wide ${col.head}`}>
+                <h2 className={`text-xs font-bold tracking-widest ${col.head}`}>
                   {lb(estado).toUpperCase()}
-                  <span className="ml-2 rounded-md bg-zinc-800/80 border border-zinc-700 px-1.5 py-0.5 text-xs font-normal text-zinc-400">{lista.length}</span>
                 </h2>
-                <select value={orden[estado] || 'prio'} onChange={e => setOrden({ ...orden, [estado]: e.target.value })}
-                  title="Sort column" aria-label={`Sort ${lb(estado)} column`}
-                  className="ml-auto max-w-[7.5rem] truncate rounded-lg border border-zinc-800 bg-zinc-900 px-2 py-1 text-xs text-zinc-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500/50">
-                  <option value="prio">Priority</option>
-                  <option value="resp">Assignee</option>
-                  <option value="custom">Custom order</option>
-                </select>
+                <span className="ml-1 rounded-md bg-slate-950/60 border border-cyan-900/50 px-2 py-0.5 text-xs font-mono text-cyan-400 shadow-inner">{lista.length}</span>
+
+                <div className="ml-auto relative flex items-center bg-transparent text-cyan-500/60 hover:text-cyan-300 transition-colors">
+                  <span className="mr-1 text-[10px]" aria-hidden>⇅</span>
+                  <select value={orden[estado] || 'prio'} onChange={e => setOrden({ ...orden, [estado]: e.target.value })}
+                    className="w-auto cursor-pointer appearance-none bg-transparent text-xs font-semibold focus:outline-none pr-3">
+                    <option className="bg-slate-900" value="prio">Priority</option>
+                    <option className="bg-slate-900" value="resp">Assignee</option>
+                    <option className="bg-slate-900" value="custom">Custom</option>
+                  </select>
+                </div>
               </div>
 
-              {/* Lista de Tareas */}
-              <div className="flex flex-1 flex-col gap-3">
+              <div className="flex flex-1 flex-col gap-3 relative">
                 {lista.length === 0 && (
-                  <p className="flex flex-1 items-center justify-center rounded-xl border border-dashed border-zinc-700/50 py-8 text-center text-xs text-zinc-500">
-                    Drop tasks here
+                  <p className="flex flex-1 items-center justify-center rounded-xl border border-dashed border-cyan-900/40 py-8 text-center text-xs font-mono text-cyan-700/50">
+                    DROP MODULE HERE
                   </p>
                 )}
                 {lista.map(t => {
                   const bl = t.estado !== 'Completada' ? bloqueos(t) : []
+                  const isHighlighted = dependenciasResaltadas.includes(t.id)
+                  const isDimmed = dependenciasResaltadas.length > 0 && t.id !== abierta && t.id !== hoveredCard && !dependenciasResaltadas.includes(t.id)
                   return (
                     <article key={t.id}
-                      onDragOver={e => { e.preventDefault(); setSobre(t.id) }}
+                      onMouseEnter={() => setHoveredCard(t.id)}
+                      onMouseLeave={() => setHoveredCard(null)}
+                      onDragOver={e => {
+                        e.preventDefault();
+                        const rect = e.currentTarget.getBoundingClientRect();
+                        const y = e.clientY - rect.top;
+                        if (y < rect.height / 2) {
+                          setSobre(t.id);
+                        } else {
+                          const idx = lista.findIndex(x => x.id === t.id);
+                          setSobre(lista[idx + 1] ? lista[idx + 1].id : `col_${estado}`);
+                        }
+                      }}
                       onDragLeave={() => setSobre(null)}
-                      onDrop={e => { e.preventDefault(); e.stopPropagation(); setSobre(null); const id = e.dataTransfer.getData('id'); if (id) soltar(id, estado, t.id) }}
-                      onClick={() => setAbierta(abierta === t.id ? null : t.id)}
-                      className={`group cursor-pointer rounded-xl border border-zinc-800 border-l-[3px] bg-zinc-900/80 p-3.5 shadow-md transition-all duration-200 hover:border-zinc-600 hover:-translate-y-0.5 hover:shadow-lg hover:bg-zinc-800/90 ${PRIO_BORDER[t.prioridad] || 'border-l-zinc-600'} ${bl.length ? 'ring-1 ring-red-500/50 bg-red-950/10' : ''}${sobre === t.id ? ' ring-2 ring-indigo-500 shadow-[0_0_15px_rgba(99,102,241,0.3)]' : ''}`}>
+                      onDrop={e => { e.preventDefault(); e.stopPropagation(); setSobre(null); e.currentTarget.style.opacity = ''; const id = e.dataTransfer.getData('id'); if (id) soltar(id, estado, sobre === `col_${estado}` ? null : sobre) }} onClick={() => setAbierta(abierta === t.id ? null : t.id)}
+
+                      onDragStart={e => {
+                        e.currentTarget.style.opacity = '0.3';
+                        e.dataTransfer.setData('id', t.id);
+                        e.dataTransfer.setDragImage(e.currentTarget, 12, 12);
+                      }}
+                      onDragEnd={e => {
+                        e.currentTarget.style.opacity = '';
+                        setSobre(null);
+                      }}
+
+                      className={`relative group cursor-pointer rounded-xl border border-l-[4px] p-4 backdrop-blur-md transition-all duration-500 ease-out hover:border-t-cyan-400 hover:border-r-cyan-400 hover:border-b-cyan-400 hover:bg-cyan-950/40 hover:shadow-[0_0_20px_rgba(6,182,212,0.15)]                      ${PRIO_BORDER[t.prioridad] || 'border-l-slate-600'} 
+                      ${isHighlighted ? 'ring-2 ring-orange-500 border-orange-500/50 bg-orange-950/20 shadow-[0_0_15px_#f9731640]' : 'border-cyan-500/20'}
+                      ${bl.length && !isHighlighted ? 'ring-1 ring-red-500/50 bg-red-950/20' : ''}
+                      ${soltado === t.id ? 'z-[60] scale-[1.05] -translate-y-6 bg-cyan-900/90 shadow-[0_20px_40px_rgba(34,211,238,0.4)] ring-2 ring-cyan-400' : (isHighlighted ? '' : 'bg-slate-950/60')}
+                      ${sobre === t.id ? "mt-12 scale-[1.02] brightness-125 z-40 before:content-[''] before:absolute before:-top-12 before:left-0 before:right-0 before:h-12 before:bg-transparent" : 'mt-0 scale-100 hover:-translate-y-1 z-10 hover:z-30 focus-within:z-30'}
+                      ${isDimmed ? 'opacity-30 grayscale-[50%]' : 'opacity-100'}`}
+                    >
+
+                      {sobre === t.id && (
+                        <div className="absolute -top-1.5 left-0 right-0 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_12px_#22d3ee] z-[60]"></div>
+                      )}
 
                       {bl.length > 0 && (
-                        <p className="mb-3 flex items-start gap-2 rounded-lg bg-red-950/40 border border-red-900/50 px-2.5 py-1.5 text-xs font-medium text-red-400">
+                        <p className="mb-3 flex items-start gap-2 rounded-lg bg-red-950/60 border border-red-500/30 px-2.5 py-1.5 text-[11px] font-medium text-red-300 backdrop-blur-sm">
                           <span aria-hidden>🔒</span>
-                          <span>Blocked by: {bl.map(b => b.titulo).join(', ')}</span>
+                          <span>BLOCKED BY: {bl.map(b => b.titulo).join(', ')}</span>
                         </p>
                       )}
 
-                      <div className="flex items-start gap-2.5">
+                      <div className="flex items-start gap-3">
                         <span draggable title="Drag to move" onClick={e => e.stopPropagation()}
                           onDragEnd={() => setSobre(null)}
                           onDragStart={e => { e.dataTransfer.setData('id', t.id); e.dataTransfer.setDragImage(e.currentTarget.closest('article'), 12, 12) }}
-                          className="mt-0.5 cursor-grab select-none rounded p-0.5 text-zinc-600 transition group-hover:text-zinc-400 active:cursor-grabbing">⠿</span>
+                          className="mt-0.5 cursor-grab select-none text-slate-600 transition group-hover:text-cyan-400 active:cursor-grabbing">⠿</span>
                         <div className="min-w-0 flex-1">
-                          <p className="text-sm font-medium leading-snug text-zinc-200">{t.titulo}</p>
-                          {t.modulo && <p className="mt-1 text-[11px] font-mono text-zinc-500 tracking-wide">{t.modulo.toUpperCase()}</p>}
+                          <p className="text-sm font-semibold leading-tight text-slate-100 drop-shadow-sm group-hover:text-cyan-50 transition-colors">{t.titulo}</p>
+                          {t.modulo && <p className="mt-1.5 text-[10px] font-mono tracking-widest text-cyan-600 uppercase">{t.modulo}</p>}
                         </div>
                         <button type="button" title="Edit task" onClick={e => { e.stopPropagation(); setEdit(t) }}
-                          className="rounded-lg p-1.5 text-sm text-zinc-500 opacity-0 transition-all group-hover:opacity-100 hover:bg-zinc-700 hover:text-zinc-300 focus:opacity-100">✏️</button>
+                          className="rounded-lg p-1.5 text-sm text-cyan-500 opacity-30 transition-all hover:bg-cyan-950 hover:text-cyan-300 hover:shadow-[0_0_10px_#06b6d433] group-hover:opacity-100">✏️</button>
                       </div>
 
-                      <div className="mt-3.5 flex flex-wrap items-center gap-2 text-xs">
+                      <div className="mt-4 flex w-full items-center">
                         <Chip valor={t.prioridad} opciones={PRIOS} onPick={v => cambiar(t.id, 'prioridad', v)} />
-                        <Chip valor={t.responsable} opciones={PERSONAS} onPick={v => cambiar(t.id, 'responsable', v)} />
-                        {/* Estado quitado del chip en la tarjeta porque ya está en la columna, hace ruido visual */}
+                        <div className="ml-auto">
+                          <Chip valor={t.responsable} opciones={PERSONAS} onPick={v => cambiar(t.id, 'responsable', v)} />
+                        </div>
                       </div>
 
-                      {abierta === t.id && (
-                        <div className="mt-3.5 border-t border-zinc-800 pt-3 text-xs text-zinc-400">
+                      {(abierta === t.id || hoveredCard === t.id) && (
+                        <div className="mt-4 border-t border-cyan-900/30 pt-3 text-xs text-slate-300 font-light">
                           {t.notas ? (
                             <p className="whitespace-pre-wrap leading-relaxed">{t.notas}</p>
                           ) : (
-                            <span className="italic text-zinc-600">No description provided.</span>
+                            <span className="italic text-slate-600">No data.</span>
                           )}
                         </div>
                       )}
                     </article>
                   )
                 })}
+
+                {sobre === `col_${estado}` && (
+                  <div className="h-1.5 mt-2 rounded-full bg-cyan-400 shadow-[0_0_12px_#22d3ee] z-[60]"></div>
+                )}
               </div>
             </section>
           )
         })}
       </div>
 
-      {/* Modal de Edición (Tema Oscuro) */}
       {edit && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm" onClick={() => setEdit(null)} role="dialog" aria-modal="true">
-          <div className="max-h-[min(90vh,40rem)] w-full max-w-lg space-y-5 overflow-y-auto rounded-2xl border border-zinc-800 bg-zinc-950 p-6 shadow-2xl" onClick={e => e.stopPropagation()}>
-            <h2 className="text-xl font-bold tracking-tight text-zinc-100">{edit.id ? 'Edit task' : 'New task'}</h2>
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-xl" onClick={() => setEdit(null)} role="dialog" aria-modal="true">
+          <div className="max-h-[min(90vh,40rem)] w-full max-w-lg space-y-6 overflow-y-auto rounded-2xl border border-cyan-500/40 bg-slate-900/90 p-8 shadow-[0_0_40px_rgba(6,182,212,0.2)]" onClick={e => e.stopPropagation()}>
+            <h2 className="text-xl font-bold tracking-widest text-cyan-100 drop-shadow-[0_0_5px_#22d3ee]">{edit.id ? 'UPDATE_MODULE' : 'INITIALIZE_TASK'}</h2>
 
-            <Campo label="Title / Feature">
+            <Campo label="MODULE DESIGNATION">
               <input autoFocus value={edit.titulo} onChange={e => setEdit({ ...edit, titulo: e.target.value })} className="inp" />
             </Campo>
 
-            <Campo label="Module (Component or Area)">
+            <Campo label="SYSTEM COMPONENT">
               <input list="modulos" value={edit.modulo} onChange={e => setEdit({ ...edit, modulo: e.target.value })} className="inp" />
               <datalist id="modulos">{[...new Set(tareas.map(t => t.modulo).filter(Boolean))].map(m => <option key={m} value={m} />)}</datalist>
             </Campo>
 
-            <div className="grid grid-cols-3 gap-3">
-              {[['Status', 'estado', ESTADOS], ['Priority', 'prioridad', PRIOS], ['Assignee', 'responsable', PERSONAS]].map(([l, k, ops]) => (
+            <div className="grid grid-cols-3 gap-4">
+              {[['STATUS', 'estado', ESTADOS], ['PRIORITY', 'prioridad', PRIOS], ['ASSIGNEE', 'responsable', PERSONAS]].map(([l, k, ops]) => (
                 <Campo key={k} label={l}>
                   <select value={edit[k]} onChange={e => setEdit({ ...edit, [k]: e.target.value })} className="inp">
                     {ops.map(o => <option key={o} value={o}>{lb(o)}</option>)}
@@ -281,35 +337,32 @@ export default function Page() {
               ))}
             </div>
 
-            <Campo label="Dependencies (must be completed first)">
-              <div className="max-h-32 space-y-1 overflow-y-auto rounded-lg border border-zinc-800 bg-zinc-900/50 p-2 text-sm">
+            <Campo label="REQUIRED DEPENDENCIES">
+              <div className="max-h-32 space-y-1 overflow-y-auto rounded-lg border border-cyan-900/50 bg-slate-950/50 p-2 text-sm shadow-inner">
                 {tareas.filter(t => t.id !== edit.id).map(t => (
-                  <label key={t.id} className="flex items-center gap-2.5 p-1 rounded hover:bg-zinc-800 cursor-pointer transition-colors text-zinc-300">
+                  <label key={t.id} className="flex items-center gap-3 p-1.5 rounded hover:bg-cyan-950/40 cursor-pointer transition-colors text-slate-300">
                     <input type="checkbox" checked={edit.depende_de.includes(t.id)}
-                      className="rounded border-zinc-700 bg-zinc-950 text-indigo-500 focus:ring-indigo-500/50"
+                      className="rounded border-cyan-700 bg-slate-900 text-cyan-500 focus:ring-cyan-500/50 focus:ring-offset-slate-900"
                       onChange={e => setEdit({ ...edit, depende_de: e.target.checked ? [...edit.depende_de, t.id] : edit.depende_de.filter(x => x !== t.id) })} />
                     <span className="truncate">{t.titulo}</span>
                   </label>
                 ))}
-                {tareas.filter(t => t.id !== edit.id).length === 0 && (
-                  <span className="text-zinc-500 italic px-1">No other tasks available.</span>
-                )}
               </div>
             </Campo>
 
-            <Campo label="Notes / Description">
+            <Campo label="PARAMETERS / LOGS">
               <textarea rows={4} value={edit.notas} onChange={e => setEdit({ ...edit, notas: e.target.value })} className="inp resize-y" />
             </Campo>
 
-            <div className="flex flex-wrap gap-2 border-t border-zinc-800 pt-5 mt-2">
+            <div className="flex flex-wrap gap-2 border-t border-cyan-900/30 pt-6 mt-4">
               {edit.id && (
-                <button type="button" onClick={borrar} className="rounded-lg px-4 py-2 text-sm font-medium text-red-400 bg-red-950/30 border border-red-900/50 transition hover:bg-red-900/50 hover:text-red-300 focus:outline-none focus:ring-2 focus:ring-red-500/50">
-                  Delete Task
+                <button type="button" onClick={borrar} className="rounded-lg px-4 py-2 text-sm font-bold tracking-wide text-red-400 bg-red-950/40 border border-red-500/30 transition hover:bg-red-900/60 hover:text-red-200 hover:shadow-[0_0_15px_#ef444440] focus:outline-none">
+                  PURGE
                 </button>
               )}
-              <div className="ml-auto flex gap-2">
-                <button type="button" onClick={() => setEdit(null)} className="btn-ghost">Cancel</button>
-                <button type="button" onClick={guardar} className="btn-primary">Save Changes</button>
+              <div className="ml-auto flex gap-3">
+                <button type="button" onClick={() => setEdit(null)} className="btn-ghost">ABORT</button>
+                <button type="button" onClick={guardar} className="btn-primary">EXECUTE</button>
               </div>
             </div>
           </div>
@@ -320,7 +373,57 @@ export default function Page() {
 }
 
 function Campo({ label, children }) {
-  return <label className="block text-xs font-semibold text-zinc-400 mb-1">{label}<div className="mt-1.5 font-normal">{children}</div></label>
+  return <label className="block text-[10px] font-mono tracking-widest text-cyan-500/80 mb-1.5">{label}<div className="mt-2 font-sans">{children}</div></label>
+}
+
+function FiltroMultiple({ label, opciones, seleccionados, setSeleccionados }) {
+  const [open, setOpen] = useState(false)
+  const ref = useRef(null)
+
+  useEffect(() => {
+    if (!open) return
+    const cerrar = e => { if (!ref.current?.contains(e.target)) setOpen(false) }
+    document.addEventListener('mousedown', cerrar)
+    return () => document.removeEventListener('mousedown', cerrar)
+  }, [open])
+
+  const toggleOption = (opcion) => {
+    if (seleccionados.includes(opcion)) {
+      setSeleccionados(seleccionados.filter(item => item !== opcion))
+    } else {
+      setSeleccionados([...seleccionados, opcion])
+    }
+  }
+
+  const activos = seleccionados.length > 0;
+
+  return (
+    <div ref={ref} className="relative">
+      <button type="button" onClick={() => setOpen(!open)}
+        className={`filter-pill ${activos ? 'filter-pill-active' : 'filter-pill-idle'}`}>
+        {label} {activos && <span className="ml-1 rounded-full bg-cyan-400 text-slate-900 px-1.5 py-0.5 text-[9px]">{seleccionados.length}</span>}
+        <span className="ml-1 text-[10px]">▾</span>
+      </button>
+
+      {open && (
+        <div className="absolute left-0 top-full mt-2 z-[60] w-48 rounded-xl border border-cyan-500/30 bg-slate-900/95 p-2 shadow-[0_0_20px_rgba(6,182,212,0.3)] backdrop-blur-xl">
+          <button
+            onClick={() => setSeleccionados([])}
+            className={`w-full text-left px-3 py-1.5 rounded-md text-xs font-semibold mb-1 transition-colors ${!activos ? 'bg-cyan-500/20 text-cyan-300' : 'text-slate-400 hover:bg-slate-800'}`}>
+            All (Clear filter)
+          </button>
+          <div className="h-px bg-slate-700/50 my-1"></div>
+          {opciones.map(o => (
+            <label key={o} className="flex items-center gap-2 px-3 py-1.5 rounded-md hover:bg-slate-800 cursor-pointer text-xs text-slate-200 transition-colors">
+              <input type="checkbox" checked={seleccionados.includes(o)} onChange={() => toggleOption(o)}
+                className="rounded border-cyan-700 bg-slate-950 text-cyan-500 focus:ring-cyan-500/50" />
+              {lb(o)}
+            </label>
+          ))}
+        </div>
+      )}
+    </div>
+  )
 }
 
 function Chip({ valor, opciones, onPick }) {
@@ -335,22 +438,22 @@ function Chip({ valor, opciones, onPick }) {
   }, [open])
 
   return (
-    <span ref={ref} className="relative" onClick={e => e.stopPropagation()}>
-      <button type="button" onClick={() => setOpen(!open)} className={`rounded-md px-2 py-1 text-[11px] font-medium transition hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 ${COLORES[valor]}`}>
-        {lb(valor)} ▾
+    <div ref={ref} className="relative z-50" onClick={e => e.stopPropagation()}>
+      <button type="button" onClick={() => setOpen(!open)} className={`rounded-md px-2.5 py-1 text-[10px] font-bold tracking-wider transition-all hover:brightness-125 focus:outline-none focus:ring-2 focus:ring-cyan-500/40 ${COLORES[valor]}`}>
+        {lb(valor).toUpperCase()}
       </button>
       {open && (
-        <ul className="absolute left-0 z-40 mt-1.5 flex w-max flex-col gap-1 rounded-xl border border-zinc-700 bg-zinc-900 p-1.5 shadow-xl shadow-black/50 backdrop-blur-md">
+        <ul className="absolute left-0 mt-2 flex w-max flex-col gap-1 rounded-xl border border-cyan-500/30 bg-slate-900/95 p-2 shadow-[0_0_20px_rgba(6,182,212,0.3)] backdrop-blur-xl z-[999]">
           {opciones.map(o => (
             <li key={o}>
               <button onClick={() => { setOpen(false); if (o !== valor) onPick(o) }}
-                className={`w-full rounded-md px-2.5 py-1.5 text-left text-[11px] transition hover:brightness-125 ${COLORES[o]} ${o === valor ? 'ring-1 ring-zinc-500' : ''}`}>
-                {lb(o)}{o === valor ? ' ✓' : ''}
+                className={`w-full rounded-md px-3 py-1.5 text-left text-[10px] font-bold tracking-wide transition-all hover:brightness-125 ${COLORES[o]} ${o === valor ? 'ring-1 ring-cyan-400 scale-105' : 'border-transparent'}`}>
+                {lb(o).toUpperCase()}
               </button>
             </li>
           ))}
         </ul>
       )}
-    </span>
+    </div>
   )
 }

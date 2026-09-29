@@ -4,65 +4,66 @@
 
 :root {
   --bg-page: #09090b;
-  /* zinc-950 */
 }
 
 @layer base {
   body {
-    /* Mantenemos tu configuración de tipografía */
     font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
-    background-color: var(--bg-page);
     color: #e4e4e7;
-    /* zinc-200 */
-
-    /* Cambiamos tu gradiente claro por uno sutil de neón oscuro */
+    background-color: var(--bg-page);
+    /* Fondo Cyberpunk: Cuadrícula cian sutil + Filtro oscuro + Imagen de ciudad abstracta */
     background-image:
-      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(49, 46, 129, 0.25), transparent),
-      radial-gradient(ellipse 60% 40% at 100% 0%, rgba(8, 145, 178, 0.15), transparent);
+      linear-gradient(#06b6d410 1px, transparent 1px),
+      linear-gradient(90deg, #06b6d410 1px, transparent 1px),
+      linear-gradient(to bottom, #09090be6, #0f172af2),
+      url('https://images.unsplash.com/photo-1555680202-c86f0e12f086?q=80&w=2560&auto=format&fit=crop');
+    background-size: 30px 30px, 30px 30px, cover, cover;
+    background-attachment: fixed;
+    background-position: center;
   }
 
-  /* Scrollbar estilizado oscuro */
   ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
   }
 
   ::-webkit-scrollbar-track {
-    background: #18181b;
+    background: #09090b80;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #3f3f46;
+    background: #06b6d440;
     border-radius: 4px;
+    border: 1px solid #06b6d420;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #52525b;
+    background: #06b6d480;
   }
 }
 
 @layer components {
   .inp {
-    @apply w-full rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm font-normal text-zinc-100 shadow-sm transition placeholder:text-zinc-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500;
+    @apply w-full rounded-lg border border-cyan-900/50 bg-slate-950/80 px-3 py-2 text-sm font-normal text-cyan-100 shadow-sm transition placeholder:text-slate-500 focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400 focus:shadow-[0_0_10px_#22d3ee40];
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 transition hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:ring-offset-2 focus:ring-offset-zinc-950;
+    @apply inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-cyan-600 to-blue-600 px-4 py-2 text-sm font-bold text-white shadow-[0_0_15px_#0891b266] transition-all hover:brightness-125 hover:shadow-[0_0_20px_#0891b299] focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 focus:ring-offset-slate-900;
   }
 
   .btn-ghost {
-    @apply inline-flex items-center justify-center rounded-lg px-3 py-2 text-sm font-medium text-zinc-400 transition hover:bg-zinc-800 hover:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-zinc-600;
+    @apply inline-flex items-center justify-center rounded-lg px-3 py-2 text-sm font-medium text-cyan-400 transition hover:bg-cyan-950/50 hover:text-cyan-200 hover:shadow-[0_0_10px_#06b6d433] focus:outline-none;
   }
 
   .filter-pill {
-    @apply rounded-full px-3.5 py-1.5 text-sm font-medium transition-all duration-200 border focus:outline-none;
+    @apply rounded-full px-4 py-1.5 text-xs font-semibold tracking-wide transition-all duration-300 border focus:outline-none backdrop-blur-md;
   }
 
   .filter-pill-active {
-    @apply bg-indigo-950/50 text-indigo-300 border-indigo-500/50 shadow-[0_0_10px_#6366f133];
+    @apply bg-cyan-950/60 text-cyan-300 border-cyan-400/50 shadow-[0_0_15px_#22d3ee4d];
   }
 
   .filter-pill-idle {
-    @apply bg-zinc-900/50 text-zinc-400 border-zinc-800 hover:bg-zinc-800 hover:text-zinc-200;
+    @apply bg-slate-900/40 text-slate-400 border-slate-700/50 hover:bg-slate-800/60 hover:text-cyan-100 hover:border-cyan-900/50 hover:shadow-[0_0_10px_#06b6d420];
   }
 }
