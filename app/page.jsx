@@ -50,6 +50,7 @@ export default function Page() {
   const [orden, setOrden] = useState({})
   const [sobre, setSobre] = useState(null)
   const [abierta, setAbierta] = useState(null)
+  const [cerrando, setCerrando] = useState(null)
   const [soltado, setSoltado] = useState(null)
   const [hoveredCard, setHoveredCard] = useState(null)
   const [showDeps, setShowDeps] = useState(false)
@@ -88,13 +89,18 @@ export default function Page() {
     redo.current = []
   }
 
+  // Motor de Undo/Redo y Escape Unificado
   useEffect(() => {
     const onKey = async (e) => {
-      if (edit) {
-        if (e.key === 'Escape') { setEdit(null); setShowDeps(false); }
-        return
+      if (e.key === 'Escape') {
+        if (edit) {
+          setEdit(null); setShowDeps(false);
+        } else if (abierta) {
+          cerrarTarjeta(abierta);
+        }
+        return;
       }
-      if (e.ctrlKey && e.key === 'z') {
+      if (!edit && e.ctrlKey && e.key.toLowerCase() === 'z') {
         if (e.shiftKey) {
           const accion = redo.current.pop()
           if (!accion) return
@@ -112,7 +118,37 @@ export default function Page() {
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [edit, cargar])
+  }, [edit, abierta, cargar])
+
+  // Detector de clic afuera para condensar la tarjeta
+  useEffect(() => {
+    if (!abierta) return;
+    const handleClickOutside = (e) => {
+      // Si el clic es dentro de una tarjeta, un modal, o los filtros, lo ignoramos
+      if (e.target.closest('article') || e.target.closest('[role="dialog"]') || e.target.closest('.filter-pill')) return;
+      cerrarTarjeta(abierta);
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [abierta]);
+
+  const cerrarTarjeta = (idCierre) => {
+    if (!idCierre) return;
+    setCerrando(idCierre);
+    setTimeout(() => {
+      setAbierta(null);
+      setCerrando(null);
+    }, 400); // El número se ajusta solo acá
+  };
+
+  const toggleTarjeta = (id) => {
+    if (abierta === id) {
+      cerrarTarjeta(id);
+    } else {
+      if (abierta) cerrarTarjeta(abierta);
+      setAbierta(id);
+    }
+  }
 
   const porId = useMemo(() => Object.fromEntries(tareas.map(t => [t.id, t])), [tareas])
   const bloqueos = t => (t.depende_de || []).map(id => porId[id]).filter(d => d && d.estado !== 'Completada')
@@ -205,7 +241,9 @@ export default function Page() {
     <main className="mx-auto max-w-[90rem] px-4 pb-12 pt-4 sm:px-6 min-h-screen">
       <style>{`
         @keyframes ripple-wave { 0% { transform: translate(-50%, -50%) scale(0); opacity: 0.8; } 100% { transform: translate(-50%, -50%) scale(2.5); opacity: 0; } }
-        .animate-ripple { animation: ripple-wave 0.5s ease-out forwards; }
+        @keyframes ripple-wave-reverse { 0% { transform: translate(-50%, -50%) scale(2.5); opacity: 0; } 50% { opacity: 0.3; } 100% { transform: translate(-50%, -50%) scale(0); opacity: 0; } }
+        .animate-ripple { animation: ripple-wave 0.4s ease-out forwards; }
+        .animate-ripple-reverse { animation: ripple-wave-reverse 0.4s ease-in forwards; }
       `}</style>
 
       {/* HEADER con Barra de Progreso Restaurada */}
@@ -289,38 +327,52 @@ export default function Page() {
                       onDragOver={e => { e.preventDefault(); const y = e.clientY - e.currentTarget.getBoundingClientRect().top; setSobre(y < e.currentTarget.getBoundingClientRect().height / 2 ? t.id : (lista[lista.findIndex(x => x.id === t.id) + 1]?.id || `col_${estado}`)) }}
                       onDragLeave={() => setSobre(null)}
                       onDrop={e => { e.preventDefault(); e.stopPropagation(); setSobre(null); const id = e.dataTransfer.getData('id'); if (id) soltar(id, estado, sobre === `col_${estado}` ? null : sobre) }}
-                      onClick={() => setAbierta(abierta === t.id ? null : t.id)}
+                      onClick={() => toggleTarjeta(t.id)}
                       onDragStart={e => { e.currentTarget.style.opacity = '0.3'; e.dataTransfer.setData('id', t.id) }}
                       onDragEnd={e => { e.currentTarget.style.opacity = ''; setSobre(null) }}
-                      className={`relative group cursor-pointer rounded-xl border border-l-[4px] p-4 backdrop-blur-md transition-all duration-500 ease-out 
-                      ${t.prioridad === 'Alta' ? 'border-l-red-500' : t.prioridad === 'Media' ? 'border-l-amber-500' : 'border-l-emerald-500'} 
+                      style={{ borderLeftStyle: bl.length > 0 && !isHighlighted ? 'dashed' : 'solid' }}
+                      className={`relative group cursor-pointer rounded-xl border border-l-[4px] p-4 backdrop-blur-md transition-colors transition-shadow duration-500 ease-out                      ${t.prioridad === 'Alta' ? 'border-l-red-500' : t.prioridad === 'Media' ? 'border-l-amber-500' : 'border-l-emerald-500'} 
                       ${isHighlighted ? 'ring-2 ring-orange-500 bg-orange-950/20' : ''}
                       ${sobre === t.id ? 'z-40 brightness-110' : 'z-10 hover:z-30 hover:-translate-y-1'}
                       ${isDimmed ? 'opacity-30 grayscale-[50%]' : 'opacity-100'}
                       ${isCardExpanded && !isHighlighted ? 'border-t-cyan-400 border-r-cyan-400 border-b-cyan-400 bg-cyan-950/40 shadow-[0_0_20px_rgba(6,182,212,0.15)]' : 'border-t-transparent border-r-transparent border-b-transparent bg-slate-950/60'}`}
                     >
-                      {/* El Ripple ahora solo escucha la variable isClicked */}
+                      {/* Animación del clic y la condensación */}
                       <div className="absolute inset-0 rounded-xl overflow-hidden pointer-events-none z-0">
                         {isClicked && <span className="absolute top-1/2 left-1/2 w-[150%] aspect-square bg-cyan-400/20 rounded-full animate-ripple transform -translate-x-1/2 -translate-y-1/2"></span>}
+                        {cerrando === t.id && <span className="absolute top-1/2 left-1/2 w-[150%] aspect-square bg-cyan-400/20 rounded-full animate-ripple-reverse transform -translate-x-1/2 -translate-y-1/2"></span>}
                       </div>
 
                       <div className="relative z-10">
+                        {/* Línea de drag and drop */}
                         {sobre === t.id && <div className="absolute -top-[14px] left-0 right-0 h-[3px] rounded-full bg-cyan-400 shadow-[0_0_15px_#22d3ee] z-[60] pointer-events-none"></div>}
 
+                        {/* NUEVO CANDADO EXPANDIBLE (SE ILUMINA EN NARANJA) */}
                         {bl.length > 0 && (
-                          <p className="mb-3 flex items-start gap-2 rounded-lg bg-red-950/60 border border-red-500/30 px-2.5 py-1.5 text-[11px] font-medium text-red-300 backdrop-blur-sm">
-                            <span aria-hidden>🔒</span>
-                            <span>BLOCKED BY: {bl.map(b => b.titulo).join(', ')}</span>
-                          </p>
+                          <div className="mb-3">
+                            <div className={`relative inline-flex items-center h-6 px-1.5 rounded-full transition-all duration-300 ease-out ${isCardExpanded ? 'w-auto px-2.5 bg-orange-950/20 border border-orange-500/50 shadow-[0_0_12px_rgba(249,115,22,0.3)]' : 'bg-slate-900/60 border border-slate-700/50'}`}>
+                              <span className={`shrink-0 flex items-center justify-center transition-colors duration-300 ${isCardExpanded ? 'text-orange-500 drop-shadow-[0_0_5px_rgba(249,115,22,0.6)]' : 'text-slate-500'}`}>
+                                <svg viewBox="0 0 24 24" fill="currentColor" className="w-3 h-3"><path fillRule="evenodd" d="M12 1.5a5.25 5.25 0 00-5.25 5.25v3a3 3 0 00-3 3v6.75a3 3 0 003 3h10.5a3 3 0 003-3v-6.75a3 3 0 00-3-3v-3c0-2.9-2.35-5.25-5.25-5.25zm3.75 8.25v-3a3.75 3.75 0 10-7.5 0v3h7.5z" clipRule="evenodd" /></svg>
+                              </span>
+                              <span className={`overflow-hidden whitespace-nowrap transition-all duration-300 ease-out font-bold tracking-wider text-slate-300 text-[10px] ${isCardExpanded ? 'max-w-[200px] opacity-100 ml-1.5' : 'max-w-0 opacity-0 ml-0'}`}>
+                                BLOCKED BY: {bl.map(b => b.titulo).join(', ')}
+                              </span>
+                            </div>
+                          </div>
                         )}
 
                         <div className="flex items-start gap-3">
                           <span draggable title="Drag to move" onClick={e => e.stopPropagation()} onDragEnd={() => setSobre(null)} onDragStart={e => e.dataTransfer.setData('id', t.id)} className="mt-0.5 cursor-grab select-none text-slate-600 hover:text-cyan-400">⠿</span>
                           <div className="min-w-0 flex-1">
-                            <p className="text-sm font-semibold text-slate-100 group-hover:text-cyan-50">{t.titulo}</p>
+                            <p className={`text-sm font-semibold transition-colors duration-300 ${bl.length > 0 ? 'text-slate-400 group-hover:text-slate-200' : 'text-slate-100 group-hover:text-cyan-50'}`}>{t.titulo}</p>
                             {subs.length > 0 && <p className="mt-1.5 text-[9px] font-mono tracking-widest text-cyan-400 uppercase">Subtasks: {subHechas}/{subs.length}</p>}
                           </div>
-                          <button type="button" onClick={e => { e.stopPropagation(); setEdit(t) }} className="rounded-lg p-1.5 text-sm text-cyan-500 opacity-30 hover:opacity-100 hover:bg-cyan-950">✏️</button>
+
+                          {/* LÁPIZ NARANJA: Brilla únicamente si isCardExpanded es true (Hover o Clic) */}
+                          <button type="button" onClick={e => { e.stopPropagation(); setEdit(t) }}
+                            className={`rounded-lg p-1.5 text-sm transition-all duration-300 hover:bg-orange-950/40 hover:scale-110 ${isCardExpanded ? 'opacity-100 drop-shadow-[0_0_5px_rgba(249,115,22,0.6)]' : 'opacity-30'}`}>
+                            ✏️
+                          </button>
                         </div>
 
                         <div className="mt-4 flex w-full items-center">
